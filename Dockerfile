@@ -64,10 +64,8 @@ RUN conda install --quiet --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-WORKDIR /tmp
-
 # Pip install hetdex-api
-RUN pip3 install hetdex-api==0.8.1
+RUN pip3 install hetdex-api==0.8.1b
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
@@ -77,7 +75,11 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
 
 USER $NB_UID
 
-ADD Elixer_Widget.ipynb /home/${NB_USER}
+RUN mkdir /home/${NB_USER}/team_classify/
+
+ADD all_pngs.tar  /home/${NB_USER}/team_classify/
+ADD dets.tar  /home/${NB_USER}/team_classify/
+ADD team-classifying-notebook.ipynb /home/${NB_USER}/team_classify/
 
 WORKDIR $HOME
 
