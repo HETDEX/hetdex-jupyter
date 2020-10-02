@@ -65,7 +65,10 @@ RUN conda install --quiet --yes \
     fix-permissions "/home/${NB_USER}"
 
 # Pip install hetdex-api
-RUN pip3 install hetdex-api==0.8.1b
+#RUN pip3 install hetdex-api==0.8.1b
+
+RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
+    ( cd hetdex_api && python3 setup.py install)
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
