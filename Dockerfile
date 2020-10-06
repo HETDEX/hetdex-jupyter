@@ -65,7 +65,6 @@ RUN conda install --quiet --yes \
     fix-permissions "/home/${NB_USER}"
 
 # Pip install hetdex-api
-#RUN pip3 install hetdex-api==0.8.1b
 
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && python3 setup.py install)
@@ -78,11 +77,9 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
 
 USER $NB_UID
 
-RUN mkdir /home/${NB_USER}/team_classify/
-
-ADD all_pngs.tar  /home/${NB_USER}/team_classify/
-ADD dets.tar  /home/${NB_USER}/team_classify/
-ADD team-classifying-notebook.ipynb /home/${NB_USER}/team_classify/
+RUN wget https://utexas.box.com/shared/static/9znlxp2s01aez9uewaxeajtokv8rxtua.tar && \
+    tar -xvf 9znlxp2s01aez9uewaxeajtokv8rxtua.tar && \
+    rm 9znlxp2s01aez9uewaxeajtokv8rxtua.ta
 
 WORKDIR $HOME
 
