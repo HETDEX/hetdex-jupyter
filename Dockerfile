@@ -79,7 +79,7 @@ USER $NB_UID
 
 RUN wget https://utexas.box.com/shared/static/9znlxp2s01aez9uewaxeajtokv8rxtua.tar && \
     tar -xvf 9znlxp2s01aez9uewaxeajtokv8rxtua.tar && \
-    rm 9znlxp2s01aez9uewaxeajtokv8rxtua.ta
+    rm 9znlxp2s01aez9uewaxeajtokv8rxtua.tar
 
 WORKDIR $HOME
 
