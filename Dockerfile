@@ -69,7 +69,11 @@ RUN conda install --quiet --yes \
 RUN pip3 install speclite && \
     pip3 install --user --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
 
-# Pip install hetdex-api
+# Pip install hetdex-api, elixer in software directory
+
+RUN mkdir software
+
+WORKDIR software
 
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && python3 setup.py install) && \
@@ -78,12 +82,13 @@ RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
 RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && pip3 install . && \
     fix-permissions "/home/${NB_USER}"
-    
-RUN mkdir hetdex-notebooks && \
-    mkdir your_clssify_dir
-    
-RUN cp -r hetdex_api/notebooks/* hetdex-notebooks
-RUN cp hetdex_api/notebooks/classify-widget.ipynb your_classify_dir
+
+WORKDIR $HOME
+
+RUN cp -r software/hetdex_api/notebooks/ $HOME/hetdex-notebooks && \
+    mkdir your_classify_dir && \
+    cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
+    cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
