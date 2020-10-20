@@ -79,8 +79,8 @@ RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && python3 setup.py install) && \
     fix-permissions "/home/${NB_USER}"
 
-RUN git clone https://github.com/HETDEX/elixer.git  && \
-    cd elixer && pip3 install . && \
+RUN git clone https://github.com/HETDEX/elixer.git  && \ 
+    cd elixer && git checkout dev-dustin && pip3 install . && \
     fix-permissions "/home/${NB_USER}"
 
 WORKDIR $HOME
