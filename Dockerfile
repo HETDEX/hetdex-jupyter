@@ -12,8 +12,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg dvipng cm-super && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
-
+USER jovyan
+RUN echo 'PS1="\w $ "' >> ~/.bashrc
 # Install Python 3 packages
 RUN conda install --quiet --yes \
     'astropy=4.0.*' \
@@ -96,7 +96,9 @@ ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
-USER $NB_UID
+WORKDIR /home/jovyan
 
-WORKDIR $HOME
+RUN chown -R jovyan /home/jovyan/
+RUN chmod 777 /home/jovyan
 
+USER jovyan
