@@ -66,8 +66,8 @@ RUN conda install --quiet --yes \
     fix-permissions "/home/${NB_USER}"
 
 # pip install packages that don't have conda installs
-RUN pip3 install speclite && \
-    pip3 install --user --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
+RUN pip install speclite==0.8 && \
+    pip install --user --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
 
 # Pip install hetdex-api, elixer in software directory
 
