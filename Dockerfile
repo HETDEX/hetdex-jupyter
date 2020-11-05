@@ -85,7 +85,7 @@ RUN git clone https://github.com/HETDEX/elixer.git  && \
 
 WORKDIR $HOME
 
-RUN cp -r software/hetdex_api/notebooks/ $HOME/hetdex-notebooks && \
+RUN cp -r software/hetdex_api/notebooks/ $HOME/work/hetdex-notebooks && \
     mkdir your_classify_dir && \
     cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
     cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/
