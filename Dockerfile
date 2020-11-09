@@ -87,7 +87,7 @@ RUN git clone https://github.com/HETDEX/elixer.git  && \
 RUN export HOME='/home/jovyan'
 WORKDIR $HOME
 
-RUN cp -r software/hetdex_api/notebooks/ $HOME/hetdex-notebooks && \
+RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks && \
     mkdir your_classify_dir && \
     cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
     cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/
@@ -107,6 +107,8 @@ WORKDIR /home/jovyan
 RUN chown -R jovyan /home/jovyan/
 RUN chmod 777 /home/jovyan
 RUN chmod 777 /home/jovyan/software
+RUN chmod 777 /home/jovyan/software/elixer
+RUN chmod 777 /home/jovyan/software/hetdex_api
 RUN chmod 777 /home/jovyan/hetdex-notebooks
 RUN chmod 777 /home/jovyan/your_classify_dir
 #USER $NB_UID
