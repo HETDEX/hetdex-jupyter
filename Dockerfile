@@ -12,6 +12,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg dvipng cm-super && \
     rm -rf /var/lib/apt/lists/*
 
+#USER $NB_UID
 USER jovyan
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
 # Install Python 3 packages
@@ -67,22 +68,23 @@ RUN conda install --quiet --yes \
 
 # pip install packages that don't have conda installs
 RUN pip install speclite==0.8 && \
-    pip install --user --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
+    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
 
 # Pip install hetdex-api, elixer in software directory
 
-RUN mkdir software
+RUN mkdir /home/jovyan/software
 
-WORKDIR software
+WORKDIR /home/jovyan/software
 
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && python3 setup.py install) && \
-    fix-permissions "/home/${NB_USER}"
+    fix-permissions "/home/jovyan"
 
-RUN git clone https://github.com/HETDEX/elixer.git  && \ 
-    cd elixer && git checkout dev-dustin && pip3 install . && \
-    fix-permissions "/home/${NB_USER}"
+RUN git clone https://github.com/HETDEX/elixer.git  && \
+    cd elixer && git checkout dev-dustin && pip install . && \
+    fix-permissions "/home/jovyan"
 
+RUN export HOME='/home/jovyan'
 WORKDIR $HOME
 
 RUN cp -r software/hetdex_api/notebooks/ $HOME/work/hetdex-notebooks && \
@@ -96,9 +98,13 @@ ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
+# USER $NB_UID
+# USER root
+
 WORKDIR /home/jovyan
+
 
 RUN chown -R jovyan /home/jovyan/
 RUN chmod 777 /home/jovyan
-
+#USER $NB_UID
 USER jovyan
