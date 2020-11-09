@@ -32,6 +32,7 @@ RUN conda install --quiet --yes \
     'h5py=2.10.*' \
     'ipywidgets=7.5.*' \
     'ipympl=0.5.*'\
+    'kaleido=0.0.*'\
     'matplotlib-base=3.3.*' \
     'numba=0.51.*' \
     'numexpr=2.7.*' \
