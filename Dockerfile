@@ -87,16 +87,16 @@ RUN git clone https://github.com/HETDEX/elixer.git  && \
 RUN export HOME='/home/jovyan'
 WORKDIR $HOME
 
-RUN cp -r software/hetdex_api/notebooks/ $HOME/work/hetdex-notebooks && \
+RUN cp -r software/hetdex_api/notebooks/ $HOME/hetdex-notebooks && \
     mkdir your_classify_dir && \
     cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
     cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
+ENV XDG_CACHE_HOME="/home/jovyan/.cache/"
 
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-    fix-permissions "/home/${NB_USER}"
+    fix-permissions "/home/jovyan"
 
 # USER $NB_UID
 # USER root
@@ -106,5 +106,8 @@ WORKDIR /home/jovyan
 
 RUN chown -R jovyan /home/jovyan/
 RUN chmod 777 /home/jovyan
+RUN chmod 777 /home/jovyan/software
+RUN chmod 777 /home/jovyan/hetdex-notebooks
+RUN chmod 777 /home/jovyan/your_classify_dir
 #USER $NB_UID
 USER jovyan
