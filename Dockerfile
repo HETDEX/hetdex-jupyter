@@ -42,6 +42,7 @@ RUN conda install --quiet --yes \
     'photutils=0.7.*' \
     'protobuf=3.12.*' \
     'pytables=3.6.*' \
+    'regions' \
     'scikit-image=0.17.*' \
     'scikit-learn=0.23.*' \
     'scipy=1.5.*' \
@@ -51,8 +52,6 @@ RUN conda install --quiet --yes \
     'widgetsnbextension=3.5.*'\
     && \
     # install kaleido in order to export plotly figures
-    conda install -c plotly python-kaleido && \
-    conda install -c astropy regions && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
@@ -66,13 +65,14 @@ RUN conda install --quiet --yes \
     jupyter lab clean -y && \
     npm cache clean --force && \
     rm -rf "/home/jovyan/.cache/yarn" && \
-    rm -rf "/home/${NB_USER}/.node-gyp" && \
+    rm -rf "/home/jovyan/.node-gyp" && \
     fix-permissions "${CONDA_DIR}" && \ 
     fix-permissions "/home/jovyan"
 
 # pip install packages that don't have conda installs
 RUN pip install speclite==0.8 && \
-    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex 
+    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
+    pip install -U kaleido
 
 # Pip install hetdex-api, elixer in software directory
 
@@ -83,13 +83,19 @@ RUN mkdir /home/jovyan/software/
     
 WORKDIR /home/jovyan/software
 
+RUN chown -R jovyan /home/jovyan/software && \
+    chmod 777 /home/jovyan/software
+    
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && python3 setup.py install) && \
-    fix-permissions "/home/jovyan"
+    fix-permissions "/home/jovyan" 
 
 RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && git checkout dev-dustin && pip install . && \
     fix-permissions "/home/jovyan"
+
+RUN chown -R jovyan /home/jovyan/software && \
+    chmod 777 /home/jovyan/software
 
 RUN export HOME='/home/jovyan'
 WORKDIR $HOME
@@ -97,7 +103,7 @@ WORKDIR $HOME
 RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks && \
     mkdir your_classify_dir && \
     cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
-    cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/
+    cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/ 
 
 RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/work/hetdex-notebooks 
 
@@ -110,9 +116,13 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
 # USER $NB_UID
 # USER root
 
+#RUN chown -R jovyan /home/jovyan/software && \
+#    chmod 777 /home/jovyan/software
+
 WORKDIR /home/jovyan
 
 RUN chown -R jovyan /home/jovyan/ && \
-    chmod 777 /home/jovyan
+    chmod 777 /home/jovyan && \ 
+    chmod -R 777 /home/jovyan/software/
 
 USER jovyan
