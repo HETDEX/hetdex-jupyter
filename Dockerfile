@@ -123,6 +123,6 @@ RUN chown -R jovyan /home/jovyan/ && \
     chmod -R 777 /home/jovyan/your_classify_dir/ && \
     chmod -R 777 /home/jovyan/.config/ && \
     chmod -R 777 /home/jovyan/.cache/matplotlib/ && \
-    chmod -R 777 /home/jovyan/.cache/astropy/
+    chmod -R 777 /home/jovyan/.cache/
 
 USER jovyan
