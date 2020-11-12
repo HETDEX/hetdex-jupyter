@@ -20,6 +20,7 @@ RUN conda install --quiet --yes \
     'astropy=4.0.*' \
     'astropy-healpix=0.5*' \
     'astrowidgets=0.1.*' \
+    'astroquery==0.4.*' \ 
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
     'bokeh=2.2.*' \
@@ -32,7 +33,6 @@ RUN conda install --quiet --yes \
     'h5py=2.10.*' \
     'ipywidgets=7.5.*' \
     'ipympl=0.5.*'\
-    'kaleido=0.0.*'\
     'matplotlib-base=3.3.*' \
     'numba=0.51.*' \
     'numexpr=2.7.*' \
@@ -50,6 +50,9 @@ RUN conda install --quiet --yes \
     'specutils=1.*' \
     'widgetsnbextension=3.5.*'\
     && \
+    # install kaleido in order to export plotly figures
+    conda install -c plotly python-kaleido && \
+    conda install -c astropy regions && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
@@ -62,19 +65,22 @@ RUN conda install --quiet --yes \
     jupyter lab build -y && \
     jupyter lab clean -y && \
     npm cache clean --force && \
-    rm -rf "/home/${NB_USER}/.cache/yarn" && \
+    rm -rf "/home/jovyan/.cache/yarn" && \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+    fix-permissions "${CONDA_DIR}" && \ 
+    fix-permissions "/home/jovyan"
 
 # pip install packages that don't have conda installs
 RUN pip install speclite==0.8 && \
-    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
+    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex 
 
 # Pip install hetdex-api, elixer in software directory
 
-RUN mkdir /home/jovyan/software
-
+RUN chown -R jovyan /home/jovyan/ && \
+    chmod 777 /home/jovyan
+    
+RUN mkdir /home/jovyan/software/ 
+    
 WORKDIR /home/jovyan/software
 
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
@@ -93,6 +99,8 @@ RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks && \
     cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
     cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/
 
+RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/work/hetdex-notebooks 
+
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/jovyan/.cache/"
 
@@ -104,13 +112,7 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
 
 WORKDIR /home/jovyan
 
+RUN chown -R jovyan /home/jovyan/ && \
+    chmod 777 /home/jovyan
 
-RUN chown -R jovyan /home/jovyan/
-RUN chmod 777 /home/jovyan
-RUN chmod 777 /home/jovyan/software
-RUN chmod 777 /home/jovyan/software/elixer
-RUN chmod 777 /home/jovyan/software/hetdex_api
-RUN chmod 777 /home/jovyan/hetdex-notebooks
-RUN chmod 777 /home/jovyan/your_classify_dir
-#USER $NB_UID
 USER jovyan
