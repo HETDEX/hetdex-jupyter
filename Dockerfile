@@ -87,11 +87,11 @@ RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
     
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
-    ( cd hetdex_api && python3 setup.py install) && \
+    ( cd hetdex_api && pip install -e .) && \
     fix-permissions "/home/jovyan" 
 
 RUN git clone https://github.com/HETDEX/elixer.git  && \
-    cd elixer && git checkout dev-dustin && pip install . && \
+    cd elixer && git checkout dev-dustin && pip install -e . && \
     fix-permissions "/home/jovyan"
 
 RUN chown -R jovyan /home/jovyan/software && \
@@ -105,8 +105,6 @@ RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks && \
     cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
     cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/ 
 
-RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/work/hetdex-notebooks 
-
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/jovyan/.cache/"
 
@@ -116,13 +114,15 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
 # USER $NB_UID
 # USER root
 
-#RUN chown -R jovyan /home/jovyan/software && \
-#    chmod 777 /home/jovyan/software
-
 WORKDIR /home/jovyan
 
 RUN chown -R jovyan /home/jovyan/ && \
     chmod 777 /home/jovyan && \ 
-    chmod -R 777 /home/jovyan/software/
+    chmod -R 777 /home/jovyan/software/ && \
+    chmod -R 777 /home/jovyan/hetdex-notebooks/ && \
+    chmod -R 777 /home/jovyan/your_classify_dir/ && \
+    chmod -R 777 /home/jovyan/.config/ && \
+    chmod -R 777 /home/jovyan/.cache/matplotlib/ && \
+    chmod -R 777 /home/jovyan/.cache/astropy/
 
 USER jovyan
