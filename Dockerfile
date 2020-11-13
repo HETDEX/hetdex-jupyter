@@ -14,7 +14,9 @@ RUN apt-get update && \
 
 #USER $NB_UID
 USER jovyan
+
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
+
 # Install Python 3 packages
 RUN conda install --quiet --yes \
     'astropy=4.0.*' \
@@ -51,7 +53,6 @@ RUN conda install --quiet --yes \
     'specutils=1.*' \
     'widgetsnbextension=3.5.*'\
     && \
-    # install kaleido in order to export plotly figures
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
@@ -110,9 +111,6 @@ ENV XDG_CACHE_HOME="/home/jovyan/.cache/"
 
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/jovyan"
-
-# USER $NB_UID
-# USER root
 
 WORKDIR /home/jovyan
 
