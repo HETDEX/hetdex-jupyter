@@ -45,6 +45,7 @@ RUN conda install --quiet --yes \
     'protobuf=3.12.*' \
     'pytables=3.6.*' \
     'regions' \
+    'reproject' \
     'scikit-image=0.17.*' \
     'scikit-learn=0.23.*' \
     'scipy=1.5.*' \
