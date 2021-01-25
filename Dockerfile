@@ -74,7 +74,8 @@ RUN conda install --quiet --yes \
 # pip install packages that don't have conda installs
 RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
-    pip install -U kaleido
+    pip install -U kaleido && \
+    pip install -U panoptes_aggregation
 
 # Pip install hetdex-api, elixer in software directory
 
