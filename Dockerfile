@@ -75,7 +75,8 @@ RUN conda install --quiet --yes \
 RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
     pip install -U kaleido && \
-    pip install -U panoptes_aggregation
+    pip install -U panoptes_aggregation && \
+    pip install agavepy
 
 # Pip install hetdex-api, elixer in software directory
 
