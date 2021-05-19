@@ -31,6 +31,7 @@ RUN conda install --quiet --yes \
     'cython=0.29.*' \
     'dask=2.25.*' \
     'dill=0.3.*' \
+    'extinction' \
     'healpy=1.13.*' \
     'h5py=2.10.*' \
     'ipywidgets=7.5.*' \
@@ -63,7 +64,7 @@ RUN conda install --quiet --yes \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
     # jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
     jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
-    jupyter lab build -y && \
+    jupyter lab build -y --dev-build=False --minimize=False && \
     jupyter lab clean -y && \
     npm cache clean --force && \
     rm -rf "/home/jovyan/.cache/yarn" && \
@@ -75,8 +76,9 @@ RUN conda install --quiet --yes \
 RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
     pip install -U kaleido && \
-    pip install -U panoptes_aggregation && \
-    pip install agavepy
+    pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git && \
+    pip install agavepy && \
+    pip install dustmaps
 
 # Pip install hetdex-api, elixer in software directory
 
