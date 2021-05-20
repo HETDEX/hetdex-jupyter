@@ -19,41 +19,42 @@ RUN echo 'PS1="\w $ "' >> ~/.bashrc
 
 # Install Python 3 packages
 RUN conda install --quiet --yes \
-    'astropy=4.0.*' \
-    'astropy-healpix=0.5*' \
-    'astrowidgets=0.1.*' \
-    'astroquery==0.4.*' \ 
-    'beautifulsoup4=4.9.*' \
+    'astropy' \
+    'astropy-healpix' \
+    'astrowidgets' \
+    'astroquery' \ 
+    'beautifulsoup4' \
     'conda-forge::blas=*=openblas' \
-    'bokeh=2.2.*' \
-    'bottleneck=1.3.*' \
-    'cloudpickle=1.6.*' \
-    'cython=0.29.*' \
-    'dask=2.25.*' \
-    'dill=0.3.*' \
+    'bokeh' \
+    'bottleneck' \
+    'cloudpickle' \
+    'cython' \
+    'dask' \
+    'dill' \
     'extinction' \
-    'healpy=1.13.*' \
-    'h5py=2.10.*' \
-    'ipywidgets=7.5.*' \
-    'ipympl=0.5.*'\
-    'matplotlib-base=3.3.*' \
-    'numba=0.51.*' \
-    'numexpr=2.7.*' \
-    'pandas=1.1.*' \
-    'patsy=0.5.*' \
-    'plotly=4.11.*' \
-    'photutils=0.7.*' \
-    'protobuf=3.12.*' \
-    'pytables=3.6.*' \
+    'healpy' \
+    'h5py' \
+    'ipywidgets' \
+    'ipympl'\
+    'matplotlib-base' \
+    'numba' \
+    'numexpr' \
+    'pandas' \
+    'patsy' \
+    'plotly' \
+    'photutils' \
+    'protobuf' \
+    'pytables' \
+    'python-kaleido' \
     'regions' \
     'reproject' \
-    'scikit-image=0.17.*' \
-    'scikit-learn=0.23.*' \
-    'scipy=1.5.*' \
-    'seaborn=0.11.*' \
-    'sep=1.0.*' \
-    'specutils=1.*' \
-    'widgetsnbextension=3.5.*'\
+    'scikit-image' \
+    'scikit-learn' \
+    'scipy' \
+    'seaborn' \
+    'sep' \
+    'specutils' \
+    'widgetsnbextension'\
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
@@ -75,7 +76,7 @@ RUN conda install --quiet --yes \
 # pip install packages that don't have conda installs
 RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
-    pip install -U kaleido && \
+#    pip install -U kaleido && \
     pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git && \
     pip install agavepy && \
     pip install dustmaps
