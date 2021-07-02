@@ -18,6 +18,7 @@ USER jovyan
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
 
 # Install Python 3 packages
+
 RUN conda install --quiet --yes \
     'astropy' \
     'astropy-healpix' \
@@ -79,7 +80,8 @@ RUN pip install speclite==0.8 && \
 #    pip install -U kaleido && \
     pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git && \
     pip install agavepy && \
-    pip install dustmaps
+    pip install dustmaps && \
+    pip install nway
 
 # Pip install hetdex-api, elixer in software directory
 
