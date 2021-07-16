@@ -77,8 +77,6 @@ RUN conda install --quiet --yes \
 # pip install packages that don't have conda installs
 RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
-#    pip install -U kaleido && \
-    pip install -U git+git://github.com/zooniverse/aggregation-for-caesar.git && \
     pip install agavepy && \
     pip install dustmaps && \
     pip install nway
