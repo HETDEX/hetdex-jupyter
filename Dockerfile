@@ -1,6 +1,7 @@
 # Copyright (c) HETDEX Data Team
 
-ARG BASE_CONTAINER=jupyter/minimal-notebook
+ARG BASE_CONTAINER=jupyter/minimal-notebook:python-3.9.4
+
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Erin Mentuch Cooper <erin@astro.as.utexas.edu>"
@@ -79,7 +80,7 @@ RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
     pip install agavepy && \
     pip install dustmaps && \
-    pip install nway
+    pip install nway 
 
 # Pip install hetdex-api, elixer in software directory
 
