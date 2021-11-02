@@ -80,6 +80,7 @@ RUN pip install speclite==0.8 && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
     pip install agavepy && \
     pip install dustmaps && \
+    pip install torch && \
     pip install nway 
 
 # Pip install hetdex-api, elixer in software directory
@@ -106,6 +107,9 @@ RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
 
 RUN export HOME='/home/jovyan'
+
+RUN echo "export PATH=$HOME/.local/bin:${PATH}" >> ~/.bashrc
+
 WORKDIR $HOME
 
 RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks && \
