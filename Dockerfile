@@ -103,6 +103,8 @@ RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && git checkout dev-dustin && pip install -e . && \
     fix-permissions "/home/jovyan"
 
+RUN pip install tapipy --ignore-installed certifi
+
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
 
