@@ -38,6 +38,7 @@ RUN conda install --quiet --yes \
     'h5py' \
     'ipywidgets' \
     'ipympl'\
+    'ligo.skymap'\
     'matplotlib-base' \
     'numba' \
     'numexpr' \
