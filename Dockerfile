@@ -36,6 +36,7 @@ RUN conda install --quiet --yes \
     'extinction' \
     'healpy' \
     'h5py' \
+    'holoviews' \
     'ipywidgets' \
     'ipympl'\
     'ligo.skymap'\
@@ -82,7 +83,9 @@ RUN pip install speclite==0.8 && \
     pip install agavepy && \
     pip install dustmaps && \
     pip install torch && \
-    pip install nway 
+    pip install nway && \
+    pip install jupyter-dash && \
+    pip3 install netcal
 
 # Pip install hetdex-api, elixer in software directory
 
@@ -136,5 +139,7 @@ RUN chown -R jovyan /home/jovyan/ && \
     chmod -R 777 /home/jovyan/.config/ && \
     chmod -R 777 /home/jovyan/.cache/matplotlib/ && \
     chmod -R 777 /home/jovyan/.cache/
+
+RUN ln -s /home/jovyan/team_classify/shared shared
 
 USER jovyan
