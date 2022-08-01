@@ -20,44 +20,43 @@ RUN echo 'PS1="\w $ "' >> ~/.bashrc
 
 # Install Python 3 packages
 
-RUN conda install --quiet --yes \
+RUN conda install --yes \
     'astropy' \
-    'astropy-healpix' \
+#    'astropy-healpix' \
     'astrowidgets' \
-    'astroquery' \ 
-    'beautifulsoup4' \
-    'conda-forge::blas=*=openblas' \
-    'bokeh' \
-    'bottleneck' \
-    'cloudpickle' \
-    'cython' \
-    'dask' \
-    'dill' \
-    'extinction' \
-    'healpy' \
-    'h5py' \
-    'holoviews' \
-    'ipywidgets' \
-    'ipympl'\
+#    'astroquery' \ 
+#    'beautifulsoup4' \
+#    'conda-forge::blas=*=openblas' \
+#    'bokeh' \
+#    'bottleneck' \
+#    'cloudpickle' \
+#    'cython' \
+#    'dask' \
+#    'dill' \
+     'extinction' \
+#    'healpy' \
+#    'h5py' \
+#    'ipywidgets' \
+#    'ipympl'\
     'ligo.skymap'\
-    'matplotlib-base' \
-    'numba' \
-    'numexpr' \
-    'pandas' \
-    'patsy' \
-    'plotly' \
+#    'matplotlib' \
+#    'numba' \
+#    'numexpr' \
+#    'pandas' \
+#    'patsy' \
+#    'plotly' \
     'photutils' \
-    'protobuf' \
-    'pytables' \
+#    'protobuf' \
+#    'pytables' \
     'python-kaleido' \
-    'regions' \
-    'reproject' \
+#    'regions' \
+#    'reproject' \
     'scikit-image' \
     'scikit-learn' \
-    'scipy' \
+#    'scipy' \
     'seaborn' \
-    'sep' \
-    'specutils' \
+#    'sep' \
+#    'specutils' \
     'widgetsnbextension'\
     && \
     conda clean --all -f -y && \
@@ -67,7 +66,6 @@ RUN conda install --quiet --yes \
     # Check this URL for most recent compatibilities
     # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
     jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-    # jupyter labextension install @bokeh/jupyter_bokeh@^2.0.0 --no-build && \
     jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
     jupyter lab build -y --dev-build=False --minimize=False && \
     jupyter lab clean -y && \
@@ -85,7 +83,8 @@ RUN pip install speclite==0.8 && \
     pip install torch && \
     pip install nway && \
     pip install jupyter-dash && \
-    pip3 install netcal
+    pip install netcal && \
+    pip install alive-progress
 
 # Pip install hetdex-api, elixer in software directory
 
@@ -98,7 +97,8 @@ WORKDIR /home/jovyan/software
 
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
-    
+
+
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && pip install -e .) && \
     fix-permissions "/home/jovyan" 
