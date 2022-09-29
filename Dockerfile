@@ -1,6 +1,7 @@
 # Copyright (c) HETDEX Data Team
 
-ARG BASE_CONTAINER=jupyter/minimal-notebook:python-3.9.4
+ARG BASE_CONTAINER=jupyter/scipy-notebook
+#minimal-notebook:python-3.9.4
 
 FROM $BASE_CONTAINER
 
@@ -21,71 +22,37 @@ RUN echo 'PS1="\w $ "' >> ~/.bashrc
 # Install Python 3 packages
 
 RUN conda install --yes \
-    'astropy' \
-#    'astropy-healpix' \
-    'astrowidgets' \
-#    'astroquery' \ 
-#    'beautifulsoup4' \
-#    'conda-forge::blas=*=openblas' \
-#    'bokeh' \
-#    'bottleneck' \
-#    'cloudpickle' \
-#    'cython' \
-#    'dask' \
-#    'dill' \
-     'extinction' \
-#    'healpy' \
-#    'h5py' \
-#    'ipywidgets' \
-#    'ipympl'\
+    'healpy' \
     'ligo.skymap'\
-#    'matplotlib' \
-#    'numba' \
-#    'numexpr' \
-#    'pandas' \
-#    'patsy' \
-#    'plotly' \
-    'photutils' \
-#    'protobuf' \
-#    'pytables' \
-    'python-kaleido' \
-#    'regions' \
-#    'reproject' \
-    'scikit-image' \
-    'scikit-learn' \
-#    'scipy' \
-    'seaborn' \
-#    'sep' \
-#    'specutils' \
-    'widgetsnbextension'\
     && \
     conda clean --all -f -y && \
-    # Activate ipywidgets extension in the environment that runs the notebook server
-    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-    # Also activate ipywidgets extension for JupyterLab
-    # Check this URL for most recent compatibilities
-    # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-    jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
-    jupyter lab build -y --dev-build=False --minimize=False && \
-    jupyter lab clean -y && \
-    npm cache clean --force && \
-    rm -rf "/home/jovyan/.cache/yarn" && \
-    rm -rf "/home/jovyan/.node-gyp" && \
+#    # Activate ipywidgets extension in the environment that runs the notebook server
+#    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
+#    # Also activate ipywidgets extension for JupyterLab
+#    # Check this URL for most recent compatibilities
+#    # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
+#    jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
+#    jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
+#    jupyter lab build -y --dev-build=False --minimize=False && \
+#    jupyter lab clean -y && \
+#    npm cache clean --force && \
+#    rm -rf "/home/jovyan/.cache/yarn" && \
+#    rm -rf "/home/jovyan/.node-gyp" && \
     fix-permissions "${CONDA_DIR}" && \ 
     fix-permissions "/home/jovyan"
 
 # pip install packages that don't have conda installs
-RUN pip install speclite==0.8 && \
-    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex && \
+RUN pip install speclite==0.16 && \
     pip install agavepy && \
     pip install dustmaps && \
     pip install torch && \
     pip install nway && \
-    pip install jupyter-dash && \
     pip install netcal && \
-    pip install alive-progress
-
+    pip install alive-progress && \
+    pip install holoviews && \
+    pip install tqdm && \
+    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
+    
 # Pip install hetdex-api, elixer in software directory
 
 RUN chown -R jovyan /home/jovyan/ && \
