@@ -1,7 +1,6 @@
 # Copyright (c) HETDEX Data Team
 
 ARG BASE_CONTAINER=jupyter/scipy-notebook
-#minimal-notebook:python-3.9.4
 
 FROM $BASE_CONTAINER
 
@@ -14,34 +13,11 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg dvipng cm-super && \
     rm -rf /var/lib/apt/lists/*
 
-#USER $NB_UID
 USER jovyan
 
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
 
-# Install Python 3 packages
-
-RUN conda install --yes \
-    'healpy' \
-    'ligo.skymap'\
-    && \
-    conda clean --all -f -y && \
-#    # Activate ipywidgets extension in the environment that runs the notebook server
-#    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-#    # Also activate ipywidgets extension for JupyterLab
-#    # Check this URL for most recent compatibilities
-#    # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
-#    jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-#    jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
-#    jupyter lab build -y --dev-build=False --minimize=False && \
-#    jupyter lab clean -y && \
-#    npm cache clean --force && \
-#    rm -rf "/home/jovyan/.cache/yarn" && \
-#    rm -rf "/home/jovyan/.node-gyp" && \
-    fix-permissions "${CONDA_DIR}" && \ 
-    fix-permissions "/home/jovyan"
-
-# pip install packages that don't have conda installs
+# pip install packages
 RUN pip install speclite==0.16 && \
     pip install agavepy && \
     pip install dustmaps && \
@@ -51,6 +27,8 @@ RUN pip install speclite==0.16 && \
     pip install alive-progress && \
     pip install holoviews && \
     pip install tqdm && \
+    pip install ligo.skymap && \
+    pip install plotly && \ 
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
     
 # Pip install hetdex-api, elixer in software directory
@@ -85,10 +63,7 @@ RUN echo "export PATH=$HOME/.local/bin:${PATH}" >> ~/.bashrc
 
 WORKDIR $HOME
 
-RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks && \
-    mkdir your_classify_dir && \
-    cp software/hetdex_api/notebooks/classify-widget.ipynb your_classify_dir/ && \
-    cp software/hetdex_api/notebooks/training-examples.ipynb your_classify_dir/ 
+RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/jovyan/.cache/"
@@ -102,7 +77,6 @@ RUN chown -R jovyan /home/jovyan/ && \
     chmod 777 /home/jovyan && \ 
     chmod -R 777 /home/jovyan/software/ && \
     chmod -R 777 /home/jovyan/hetdex-notebooks/ && \
-    chmod -R 777 /home/jovyan/your_classify_dir/ && \
     chmod -R 777 /home/jovyan/.config/ && \
     chmod -R 777 /home/jovyan/.cache/matplotlib/ && \
     chmod -R 777 /home/jovyan/.cache/
