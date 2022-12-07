@@ -15,11 +15,11 @@ RUN echo 'PS1="\w $ "' >> ~/.bashrc
 RUN pip install speclite==0.16 && \
     pip install agavepy && \
     pip install dustmaps && \
-    pip install torch && \
+#    pip install torch && \
     pip install nway && \
-    pip install netcal && \
+#    pip install netcal && \
     pip install alive-progress && \
-    pip install holoviews && \
+#    pip install holoviews && \
     pip install tqdm && \
     pip install ligo.skymap && \
     pip install plotly && \
@@ -51,9 +51,7 @@ RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && git checkout dev-dustin && pip install -e . && \
     fix-permissions "/home/jovyan"
 
-RUN pip install tapipy --ignore-installed certifi #&& \
-    pip install pyimfit
-
+RUN pip install tapipy --ignore-installed certifi
 
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
@@ -65,6 +63,12 @@ RUN echo "export PATH=$HOME/.local/bin:${PATH}" >> ~/.bashrc
 WORKDIR $HOME
 
 RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks
+
+# Copy notebooks for catalog access
+
+RUN mkdir /home/jovyan/your_temporary_workspace && \
+    cp software/hetdex_api/notebooks/HETDEX_*.ipynb /home/jovyan/your_temporary_workspace/
+    
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/jovyan/.cache/"
