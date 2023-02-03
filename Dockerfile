@@ -7,6 +7,10 @@ FROM $BASE_CONTAINER
 
 LABEL maintainer="Erin Mentuch Cooper <erin@astro.as.utexas.edu>"
 
+USER root
+
+RUN apt-get update && apt-get install -y poppler-utils
+
 USER jovyan
 
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
@@ -38,11 +42,6 @@ WORKDIR /home/jovyan/software
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
 
-#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-#    jupyter labextension install jupyter-matplotlib@^0.7.2 --no-build && \
-#    jupyter lab build -y --dev-build=False --minimize=False && \
-#    jupyter lab clean -y 
-
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && pip install -e .) && \
     fix-permissions "/home/jovyan" 
@@ -50,6 +49,9 @@ RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
 RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && git checkout dev-dustin && pip install -e . && \
     fix-permissions "/home/jovyan"
+
+# on an earlier version until astrowidgets is updated
+RUN pip install ginga==3.4.2
 
 RUN pip install tapipy --ignore-installed certifi
 
@@ -82,6 +84,7 @@ RUN chown -R jovyan /home/jovyan/ && \
     chmod 777 /home/jovyan && \ 
     chmod -R 777 /home/jovyan/software/ && \
     chmod -R 777 /home/jovyan/hetdex-notebooks/ && \
+    chmod -R 777 /home/jovyan/your_temporary_workspace/ && \
     chmod -R 777 /home/jovyan/.config/ && \
     chmod -R 777 /home/jovyan/.cache/matplotlib/ && \
     chmod -R 777 /home/jovyan/.cache/
