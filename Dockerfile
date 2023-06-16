@@ -28,7 +28,8 @@ RUN pip install speclite==0.16 && \
     pip install ligo.skymap && \
     pip install plotly && \
     pip install pyimfit && \
-    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
+    pip install umap-learn && \
+    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex 
     
 # Pip install hetdex-api, elixer in software directory
 
@@ -51,7 +52,7 @@ RUN git clone https://github.com/HETDEX/elixer.git  && \
     fix-permissions "/home/jovyan"
 
 # on an earlier version until astrowidgets is updated
-RUN pip install ginga==3.4.2
+# RUN pip install ginga==3.4.2
 
 RUN pip install tapipy --ignore-installed certifi
 
