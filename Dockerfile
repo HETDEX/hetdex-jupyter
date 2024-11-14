@@ -1,8 +1,7 @@
 # Copyright (c) HETDEX Data Team
 
-#ARG BASE_CONTAINER=jupyter/scipy-notebook:python-3.9.4
-ARG BASE_CONTAINER=jupyter/scipy-notebook:2022-08-15
-
+#ARG BASE_CONTAINER=jupyter/scipy-notebook:2022-08-15
+ARG BASE_CONTAINER=quay.io/jupyter/scipy-notebook:latest
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Erin Mentuch Cooper <erin@astro.as.utexas.edu>"
@@ -16,19 +15,19 @@ USER jovyan
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
 
 # pip install packages
-RUN pip install speclite==0.16 && \
+RUN pip install speclite && \
     pip install agavepy && \
     pip install dustmaps && \
-#    pip install torch && \
     pip install nway && \
-#    pip install netcal && \
     pip install alive-progress && \
-#    pip install holoviews && \
+    pip install holoviews && \
+    pip install corner && \
     pip install tqdm && \
     pip install ligo.skymap && \
     pip install plotly && \
-    pip install pyimfit && \
-    pip install umap-learn && \
+    pip install -U kaleido && \
+#    pip install pyimfit && \
+#    pip install umap-learn && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex 
     
 # Pip install hetdex-api, elixer in software directory
@@ -40,20 +39,20 @@ RUN mkdir /home/jovyan/software/
     
 WORKDIR /home/jovyan/software
 
+#RUN pip install tensorflow &&\
+RUN pip install tables
+
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
-
-RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
-    ( cd hetdex_api && pip install -e .) && \
-    fix-permissions "/home/jovyan" 
 
 RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && git checkout dev-dustin && pip install -e . && \
     fix-permissions "/home/jovyan"
 
-# on an earlier version until astrowidgets is updated
-# RUN pip install ginga==3.4.2
-
+RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
+    ( cd hetdex_api && pip install -e .) && \
+    fix-permissions "/home/jovyan"
+    
 RUN pip install tapipy --ignore-installed certifi
 
 RUN chown -R jovyan /home/jovyan/software && \
@@ -70,7 +69,7 @@ RUN cp -r software/hetdex_api/notebooks/ /home/jovyan/hetdex-notebooks
 # Copy notebooks for catalog access
 
 RUN mkdir /home/jovyan/your_temporary_workspace && \
-    cp software/hetdex_api/notebooks/HETDEX_*.ipynb /home/jovyan/your_temporary_workspace/
+    cp software/hetdex_api/notebooks/public/HETDEX_*.ipynb /home/jovyan/your_temporary_workspace/
     
 
 # Import matplotlib the first time to build the font cache.
