@@ -14,6 +14,9 @@ USER jovyan
 
 RUN echo 'PS1="\w $ "' >> ~/.bashrc
 
+#force earlier versions than what hetdex-api will install
+RUN pip install numpy==1.26.4
+
 # pip install packages
 RUN pip install speclite && \
     pip install agavepy && \
@@ -26,10 +29,10 @@ RUN pip install speclite && \
     pip install ligo.skymap && \
     pip install plotly && \
     pip install -U kaleido && \
-#    pip install pyimfit && \
-#    pip install umap-learn && \
-    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex 
-    
+    pip install umap-learn && \
+    pip install pyimfit && \
+    pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
+
 # Pip install hetdex-api, elixer in software directory
 
 RUN chown -R jovyan /home/jovyan/ && \
@@ -39,21 +42,21 @@ RUN mkdir /home/jovyan/software/
     
 WORKDIR /home/jovyan/software
 
-#RUN pip install tensorflow &&\
 RUN pip install tables
 
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
 
-RUN git clone https://github.com/HETDEX/elixer.git  && \
-    cd elixer && git checkout dev-dustin && pip install -e . && \
-    fix-permissions "/home/jovyan"
-
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && pip install -e .) && \
     fix-permissions "/home/jovyan"
     
+RUN git clone https://github.com/HETDEX/elixer.git  && \
+    cd elixer && git checkout dev-dustin && pip install -e . && \
+    fix-permissions "/home/jovyan"
+
 RUN pip install tapipy --ignore-installed certifi
+RUN pip install --upgrade jupyterlab jupyterlab_server jupyter_server traitlets nbformat
 
 RUN chown -R jovyan /home/jovyan/software && \
     chmod 777 /home/jovyan/software
