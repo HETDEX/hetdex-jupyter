@@ -1,7 +1,7 @@
 # Copyright (c) HETDEX Data Team
 
-#ARG BASE_CONTAINER=jupyter/scipy-notebook:2022-08-15
-ARG BASE_CONTAINER=quay.io/jupyter/scipy-notebook:latest
+#ARG BASE_CONTAINER=jupyter/scipy-notebook:2024-11-04
+ARG BASE_CONTAINER=quay.io/jupyter/scipy-notebook:2024-11-04
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Erin Mentuch Cooper <erin@astro.as.utexas.edu>"
@@ -27,10 +27,9 @@ RUN pip install speclite && \
     pip install corner && \
     pip install tqdm && \
     pip install ligo.skymap && \
-    pip install plotly && \
-    pip install -U kaleido && \
-    pip install umap-learn && \
-    pip install pyimfit && \
+    pip install plotly==5.20.0 && \
+    pip install -U kaleido==0.2.1 && \
+    pip install filelock && \
     pip install --extra-index-url https://gate.mpe.mpg.de/pypi/simple/ pyhetdex
 
 # Pip install hetdex-api, elixer in software directory
@@ -50,12 +49,15 @@ RUN chown -R jovyan /home/jovyan/software && \
 RUN git clone https://github.com/HETDEX/hetdex_api.git  && \
     ( cd hetdex_api && pip install -e .) && \
     fix-permissions "/home/jovyan"
-    
+
 RUN git clone https://github.com/HETDEX/elixer.git  && \
     cd elixer && git checkout dev-dustin && pip install -e . && \
     fix-permissions "/home/jovyan"
 
 RUN pip install tapipy --ignore-installed certifi
+
+RUN pip install pyimfit
+
 RUN pip install --upgrade jupyterlab jupyterlab_server jupyter_server traitlets nbformat
 
 RUN chown -R jovyan /home/jovyan/software && \
